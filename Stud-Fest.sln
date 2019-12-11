@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd", "BackEnd\BackEnd.csproj", "{5CE7BD0B-0672-4318-AF7E-1122102522D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModels", "DataModels\DataModels.csproj", "{F3C12B5C-FBD1-43DD-8772-AA061E07A825}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5CE7BD0B-0672-4318-AF7E-1122102522D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE7BD0B-0672-4318-AF7E-1122102522D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE7BD0B-0672-4318-AF7E-1122102522D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE7BD0B-0672-4318-AF7E-1122102522D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3C12B5C-FBD1-43DD-8772-AA061E07A825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3C12B5C-FBD1-43DD-8772-AA061E07A825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3C12B5C-FBD1-43DD-8772-AA061E07A825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3C12B5C-FBD1-43DD-8772-AA061E07A825}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A27A25A3-446D-4E4D-89FF-BC094290CA04}
+	EndGlobalSection
+EndGlobal
