@@ -1,8 +1,10 @@
 ﻿using System;
 
-namespace DataModels.Models
-{
-    public class Orar
+namespace BackEnd
+{/// <summary>
+/// Acesta este o clasa asemanatoare cu Orar dat din cauza problemelor de deserializare la data a fost necesar un camp string
+/// </summary>
+    public class OrarT
     {
         public int Id { get; set; }
         public int FacultateId { get; set; }
@@ -10,7 +12,7 @@ namespace DataModels.Models
         public int ProfesorId { get; set; }
         public int SalaId { get; set; }
         public int MaterieId { get; set; }
-        public DateTimeOffset Ora { get; set; }
+        public string Ora { get; set; }
         public int An { get; set; }
         public int Grupa { get; set; }
         public int Subgrupa { get; set; }

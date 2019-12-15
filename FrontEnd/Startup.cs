@@ -1,12 +1,16 @@
-using BackEnd;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FrontEnd.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace DataModels
+namespace FrontEnd
 {
     public class Startup
     {
@@ -20,12 +24,12 @@ namespace DataModels
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddRazorPages();
 
-            services.AddControllers();
-            services.AddSwaggerGen(options =>
-             options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Stud-Info API", Version = "v1" })
-         );
+           services.AddHttpClient<IApiClient, ApiClient>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration["ServiceUrl"]);
+            });
             services.AddApplicationInsightsTelemetry();
         }
 
@@ -36,8 +40,15 @@ namespace DataModels
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -45,11 +56,8 @@ namespace DataModels
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
-
-            app.UseSwagger();
-            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Stud-Info API v1"));
         }
     }
 }

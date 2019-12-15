@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackEnd;
 using DataModels.Models;
+using DataModels.Translates;
 
 namespace BackEnd.Controllers
 {
@@ -23,14 +24,33 @@ namespace BackEnd.Controllers
 
         // GET: api/Students
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudent()
+        public async Task<ActionResult<IEnumerable<StudentResponse>>> GetStudent()
         {
-            return await _context.Student.ToListAsync();
+
+            List<StudentResponse> v = new List<StudentResponse>();
+            foreach (var item in await _context.Student.AsNoTracking().ToListAsync())
+                v.Add(new StudentResponse
+                {
+                    Id = item.Id,
+                    Nume = item.Nume,
+                    Prenume = item.Prenume,
+                    Mail = item.Mail,
+                    An =item.An, 
+                    Grupa=item.Grupa,
+                    Subgrupa = item.Subgrupa,
+                    SpecializareId=item.SpecializareId, 
+                    Specializare= await _context.Specializare.FindAsync(item.SpecializareId),
+                    FacultateId = item.FacultateId,
+                    Facultate = await _context.Facultate.FindAsync(item.FacultateId)
+                });
+
+
+            return v;
         }
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(string id)
+        public async Task<ActionResult<StudentResponse>> GetStudent(string id)
         {
             var student = await _context.Student.FindAsync(id);
 
@@ -39,7 +59,20 @@ namespace BackEnd.Controllers
                 return NotFound();
             }
 
-            return student;
+            return new StudentResponse
+            {
+                Id = student.Id,
+                Nume = student.Nume,
+                Prenume = student.Prenume,
+                Mail = student.Mail,
+                An = student.An,
+                Grupa = student.Grupa,
+                Subgrupa = student.Subgrupa,
+                SpecializareId = student.SpecializareId,
+                Specializare = await _context.Specializare.FindAsync(student.SpecializareId),
+                FacultateId = student.FacultateId,
+                Facultate = await _context.Facultate.FindAsync(student.FacultateId)
+            };
         }
 
         // PUT: api/Students/5

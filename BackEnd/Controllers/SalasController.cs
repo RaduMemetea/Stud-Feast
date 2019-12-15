@@ -1,12 +1,10 @@
-﻿using System;
+﻿using DataModels.Models;
+using DataModels.Translates;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BackEnd;
-using DataModels.Models;
 
 namespace BackEnd.Controllers
 {
@@ -23,14 +21,25 @@ namespace BackEnd.Controllers
 
         // GET: api/Salas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sala>>> GetSala()
+        public async Task<ActionResult<IEnumerable<SalaResponse>>> GetSala()
         {
-            return await _context.Sala.ToListAsync();
+            List<SalaResponse> v = new List<SalaResponse>();
+            foreach (var item in await _context.Sala.AsNoTracking().ToListAsync())
+                v.Add(new SalaResponse
+                {
+                    Id = item.Id,
+                    Numar = item.Numar,
+                    FacultateId = item.FacultateId,
+                    Facultate = await _context.Facultate.FindAsync(item.FacultateId)
+                });
+
+
+            return v;
         }
 
         // GET: api/Salas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Sala>> GetSala(int id)
+        public async Task<ActionResult<SalaResponse>> GetSala(int id)
         {
             var sala = await _context.Sala.FindAsync(id);
 
@@ -39,7 +48,13 @@ namespace BackEnd.Controllers
                 return NotFound();
             }
 
-            return sala;
+            return new SalaResponse
+            {
+                Id = sala.Id,
+                Numar = sala.Numar,
+                FacultateId = sala.FacultateId,
+                Facultate = await _context.Facultate.FindAsync(sala.FacultateId)
+            };
         }
 
         // PUT: api/Salas/5

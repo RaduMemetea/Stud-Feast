@@ -30,7 +30,6 @@ namespace DataModels.Models
         public int Grupa { get; set; }
         public int Subgrupa { get; set; }
 
-        public virtual ICollection<Orar> Orar { get; set; }
 
     }
 }

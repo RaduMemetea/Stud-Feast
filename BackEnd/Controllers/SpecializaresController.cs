@@ -1,12 +1,10 @@
-﻿using System;
+﻿using DataModels.Models;
+using DataModels.Translates;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BackEnd;
-using DataModels.Models;
 
 namespace BackEnd.Controllers
 {
@@ -23,14 +21,27 @@ namespace BackEnd.Controllers
 
         // GET: api/Specializares
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Specializare>>> GetSpecializare()
+        public async Task<ActionResult<IEnumerable<SpecializareResponse>>> GetSpecializare()
         {
-            return await _context.Specializare.ToListAsync();
+            List<SpecializareResponse> v = new List<SpecializareResponse>();
+            foreach (var item in await _context.Specializare.AsNoTracking().ToListAsync())
+                v.Add(new SpecializareResponse
+                {
+                    Id = item.Id,
+                    An = item.An,
+                    Nume = item.Nume,
+                    FacultateId = item.FacultateId,
+                    Facultate = await _context.Facultate.FindAsync(item.FacultateId)
+                });
+
+
+            return v;
+
         }
 
         // GET: api/Specializares/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Specializare>> GetSpecializare(int id)
+        public async Task<ActionResult<SpecializareResponse>> GetSpecializare(int id)
         {
             var specializare = await _context.Specializare.FindAsync(id);
 
@@ -39,7 +50,14 @@ namespace BackEnd.Controllers
                 return NotFound();
             }
 
-            return specializare;
+            return new SpecializareResponse
+            {
+                Id = specializare.Id,
+                An = specializare.An,
+                Nume = specializare.Nume,
+                FacultateId = specializare.FacultateId,
+                Facultate = await _context.Facultate.FindAsync(specializare.FacultateId)
+            };
         }
 
         // PUT: api/Specializares/5
