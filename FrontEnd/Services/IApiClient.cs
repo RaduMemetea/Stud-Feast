@@ -10,11 +10,13 @@ namespace FrontEnd.Services
     public interface IApiClient
     {
         Task<List<OrarResponse>> GetOrarAsync();
+        Task<List<OrarResponse>> GetOrarByStudentAsync(string studentId);
         Task<List<SalaResponse>> GetSalaAsync(int id);
         Task<Profesori> GetProfesorAsync(int id);
         Task<Facultate> GetFacultateAsync(int id);
         Task<Materie> GetMaterieAsync(int id);
         Task<SpecializareResponse> GetSpecializareAsync(int id);
-        Task<StudentResponse> GetStudentAsync(int id);
+        Task<StudentResponse> GetStudentAsync(string id); 
+        Task<StudentResponse> GetStudentByMailAsync(string mail);
     }
 }

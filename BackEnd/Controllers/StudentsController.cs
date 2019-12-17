@@ -74,6 +74,31 @@ namespace BackEnd.Controllers
                 Facultate = await _context.Facultate.FindAsync(student.FacultateId)
             };
         }
+        [HttpGet("mail/{mail}")]
+        public async Task<ActionResult<StudentResponse>> GetStudentByMail(string mail)
+        {
+            var student = await _context.Student.Where(x=>x.Mail==mail).FirstAsync();
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return new StudentResponse
+            {
+                Id = student.Id,
+                Nume = student.Nume,
+                Prenume = student.Prenume,
+                Mail = student.Mail,
+                An = student.An,
+                Grupa = student.Grupa,
+                Subgrupa = student.Subgrupa,
+                SpecializareId = student.SpecializareId,
+                Specializare = await _context.Specializare.FindAsync(student.SpecializareId),
+                FacultateId = student.FacultateId,
+                Facultate = await _context.Facultate.FindAsync(student.FacultateId)
+            };
+        }
 
         // PUT: api/Students/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for

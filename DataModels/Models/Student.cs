@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,8 +24,9 @@ namespace DataModels.Models
         [Required]
         [StringLength(200)]
         public string Mail { get; set; }
-
+        [ForeignKey("Facultate")]
         public int FacultateId { get; set; }
+        [ForeignKey("Specializare")]
         public int SpecializareId { get; set; }
         public int An { get; set; }
         public int Grupa { get; set; }

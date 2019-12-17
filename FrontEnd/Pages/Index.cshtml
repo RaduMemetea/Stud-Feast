@@ -1,35 +1,37 @@
 ﻿@page
 @model IndexModel
 @using System.Globalization;
+
 @{
     ViewData["Title"] = "Home page";
 }
-    <div class="Orar">
-        <ul class="nav nav-pills mb-3">
-            @foreach (var day in Model.Zile)
-            {
-                <li role="presentation" class="nav-item">
-                    <a class="nav-link @(Model.CurrentDay == day ? "active" : null)" asp-route-day="@day">@day.ToString()</a>
-                </li>
-            }
-        </ul>
-        <div class="row">
-            @foreach (var ora in Model.Orar)
-            {
+<div class="Orar">
+    <ul class="nav nav-pills mb-3">
+        @foreach (var day in Model.Zile)
+        {
+            <li role="presentation" class="nav-item">
+                <a class="nav-link @(Model.CurrentDay == day ? "active" : null)" asp-route-day="@day">@day.ToString()</a>
+            </li>
+        }
+    </ul>
+    
+    <div class="row">
+        @foreach (var ora in Model.Orar)
+        {
 
-                <div class="col-md-3 mb-4">
-                    <div class="card shadow session h-auto">
-                        <div class="card-header">@ora.Ora.ToString(@"HH\:mm", CultureInfo.InvariantCulture) @{string curs = ora.Curs == true ? "- Curs" : "- Laborator";}@curs</div>
-                        <div class="card-body text-center">
-                            <h5><p>@ora.Materie.Nume</p></h5>
-                        </div>
-                        <div class="card-footer">
-                            <h7>@ora.Sala.Numar - @ora.Profesor.Nume @ora.Profesor.Prenume</h7>
-                        </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow session h-auto">
+                    <div class="card-header">@ora.Ora.ToString(@"HH\:mm", CultureInfo.InvariantCulture) @{string curs = ora.Curs == true ? "- Curs" : "- Laborator";}@curs</div>
+                    <div class="card-body text-center">
+                        <h5><p>@ora.Materie.Nume</p></h5>
+                    </div>
+                    <div class="card-footer">
+                        <h7>@ora.Sala.Numar - @ora.Profesor.Nume @ora.Profesor.Prenume</h7>
                     </div>
                 </div>
+            </div>
 
-            }
-        </div>
+        }
+    </div>
 
-        </div>
+</div>

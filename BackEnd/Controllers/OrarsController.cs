@@ -1,13 +1,11 @@
-﻿using System;
+﻿using DataModels.Models;
+using DataModels.Translates;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BackEnd;
-using DataModels.Models;
-using DataModels.Translates;
 
 namespace BackEnd.Controllers
 {
@@ -39,12 +37,12 @@ namespace BackEnd.Controllers
                     Ora = item.Ora,
                     Par_Impar = item.Par_Impar,
 
-                    MaterieId =item.MaterieId, 
-                    Materie= await _context.Materie.FindAsync(item.MaterieId),
-                    ProfesorId =item.ProfesorId,
-                    Profesor= await _context.Profesori.FindAsync(item.ProfesorId),
-                    SalaId =item.SalaId,
-                    Sala= await _context.Sala.FindAsync(item.SalaId),
+                    MaterieId = item.MaterieId,
+                    Materie = await _context.Materie.FindAsync(item.MaterieId),
+                    ProfesorId = item.ProfesorId,
+                    Profesor = await _context.Profesori.FindAsync(item.ProfesorId),
+                    SalaId = item.SalaId,
+                    Sala = await _context.Sala.FindAsync(item.SalaId),
                     SpecializareId = item.SpecializareId,
                     Specializare = await _context.Specializare.FindAsync(item.SpecializareId),
                     FacultateId = item.FacultateId,
@@ -91,7 +89,58 @@ namespace BackEnd.Controllers
 
             };
         }
+        [HttpGet("sId/{studentId}")]
+        public async Task<ActionResult<IEnumerable<OrarResponse>>> GetOrarByStudent(string studentId)
+        {
+            var student = await _context.Student.FindAsync(studentId);
 
+            if (student == null)
+                return NotFound();
+
+            var orar = await _context.Orar.
+                Where(x => x.FacultateId == student.FacultateId).
+                Where(x => x.SpecializareId == student.SpecializareId).
+                Where(x => x.An == student.An).
+                Where(x => x.Grupa.ToString().Contains(student.Grupa.ToString()) || x.Curs == true).
+                Where(x => x.Subgrupa.ToString().Contains(student.Subgrupa.ToString()) || x.Curs == true)              
+                .ToListAsync();
+
+
+
+            if (orar == null)
+                return NotFound();
+
+            List<OrarResponse> v = new List<OrarResponse>();
+            foreach (var item in orar)
+                v.Add(new OrarResponse
+                {
+                    Id = item.Id,
+                    An = item.An,
+                    Grupa = item.Grupa,
+                    Subgrupa = item.Subgrupa,
+
+                    Curs = item.Curs,
+                    Ora = item.Ora,
+                    Par_Impar = item.Par_Impar,
+
+                    MaterieId = item.MaterieId,
+                    Materie = await _context.Materie.FindAsync(item.MaterieId),
+                    ProfesorId = item.ProfesorId,
+                    Profesor = await _context.Profesori.FindAsync(item.ProfesorId),
+                    SalaId = item.SalaId,
+                    Sala = await _context.Sala.FindAsync(item.SalaId),
+                    SpecializareId = item.SpecializareId,
+                    Specializare = await _context.Specializare.FindAsync(item.SpecializareId),
+                    FacultateId = item.FacultateId,
+                    Facultate = await _context.Facultate.FindAsync(item.FacultateId)
+
+                });
+
+
+            return v;
+
+
+        }
         // PUT: api/Orars/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -144,19 +193,21 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<Orar>> PostOrar(OrarT orar)
         {
-            Orar ne = new Orar { An = orar.An ,
-                Curs =orar.Curs, 
-                FacultateId=orar.FacultateId, 
-                Grupa=orar.Grupa, 
-                Id=orar.Id, 
-                MaterieId=orar.MaterieId, 
-                Par_Impar=orar.Par_Impar, 
-                ProfesorId=orar.ProfesorId, 
-                SalaId=orar.SalaId, 
-                SpecializareId=orar.SpecializareId, 
-                Subgrupa=orar.Subgrupa, 
-                Ora=DateTimeOffset.Parse(orar.Ora)
-                };
+            Orar ne = new Orar
+            {
+                An = orar.An,
+                Curs = orar.Curs,
+                FacultateId = orar.FacultateId,
+                Grupa = orar.Grupa,
+                Id = orar.Id,
+                MaterieId = orar.MaterieId,
+                Par_Impar = orar.Par_Impar,
+                ProfesorId = orar.ProfesorId,
+                SalaId = orar.SalaId,
+                SpecializareId = orar.SpecializareId,
+                Subgrupa = orar.Subgrupa,
+                Ora = DateTimeOffset.Parse(orar.Ora)
+            };
 
             Console.WriteLine();
             _context.Orar.Add(ne);

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataModels.Models
 {
@@ -9,6 +10,7 @@ namespace DataModels.Models
         [Required]
         public string Numar { get; set; }
         [Required]
+        [ForeignKey("Facultate")]
         public int FacultateId { get; set; }
     }
 }

@@ -69,13 +69,31 @@ namespace FrontEnd.Services
 
         }
 
-        public async Task<StudentResponse> GetStudentAsync(int id)
+        public async Task<StudentResponse> GetStudentAsync(string id)
         {
             var response = await _httpClient.GetAsync($"https://localhost:5001/api/Students/{id}");
 
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<StudentResponse>();
 
+        }
+
+        public async Task<StudentResponse> GetStudentByMailAsync(string mail)
+        {
+            var response = await _httpClient.GetAsync($"https://localhost:5001/api/Students/mail/{mail}");
+
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<StudentResponse>();
+        }
+
+        public async Task<List<OrarResponse>> GetOrarByStudentAsync(string studentId)
+        {
+
+
+            var response = await _httpClient.GetAsync($"https://localhost:5001/api/Orars/sId/{studentId}");
+
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<List<OrarResponse>>();
         }
     }
 }
